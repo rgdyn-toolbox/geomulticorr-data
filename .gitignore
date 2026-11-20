@@ -1,0 +1,40 @@
+# Python and local settings
+__pycache__/
+*.pyc
+.pytest_cache/
+.env
+
+# Local builds. Sentinel-2 and Landsat are published as release assets, never committed.
+build/
+
+# PlanetScope and SPOT: not redistributable. Listed one by one, so they stay out
+# even if the build/ line above is removed.
+## PlanetScope
+build/bank/PierreBrune/planetscope/
+build/datasets/bank_PierreBrune_planetscope/
+build/datasets/MS_PierreBrune_Planet/
+build/work/MS_PierreBrune_Planet/
+build/work/MS_PierreBrune_Planet_dem/
+build/release/bank_PierreBrune_planetscope.tar.gz
+build/release/MS_PierreBrune_Planet.tar.gz
+build/datasets/planet-pasdelours-results/
+build/work/planet-pasdelours-results/
+build/release/planet-pasdelours-results.tar.gz
+## SPOT
+build/bank/PierreBrune/spot/
+build/datasets/bank_PierreBrune_spot/
+build/datasets/MS_PierreBrune_SPOT/
+build/work/MS_PierreBrune_SPOT/
+build/work/MS_PierreBrune_SPOT_dem/
+build/release/bank_PierreBrune_spot.tar.gz
+build/release/MS_PierreBrune_SPOT.tar.gz
+build/datasets/spot-pasdelours/
+build/work/spot-pasdelours/
+build/release/spot-pasdelours.tar.gz
+build/bank_spot.log
+## Logs and the site figure (it plots the PlanetScope and SPOT series too)
+build/logs/MS_PierreBrune_Planet.log
+build/logs/project_planetscope.log
+build/logs/MS_PierreBrune_SPOT.log
+build/logs/project_spot.log
+build/figures/

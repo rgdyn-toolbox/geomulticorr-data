@@ -1,0 +1,92 @@
+# Pierre Brune rock glacier (Vanoise, French Alps).
+# One GMC project per sensor, each built by GMC from this site's image bank.
+# Read by scripts/site.py; scripts/fetch_bank.py and scripts/build_project.py take the
+# site name and a sensor key from this file.
+
+name: PierreBrune
+pz_name: PierreBrune            # no "_": it would break the thumb and pair names
+pz_shortname: PBR
+center_lonlat: [6.850608527519294, 45.37927790436514]
+epsg: 2154                      # every project, whatever the source CRS
+moving_areas: moving_areas.gpkg # next to this file
+moving_areas_credit: "Rock glacier outline: Xavier Bodin, Diego Cusicanqui, Thibaut Duvanel, Julia Agziou, Thomas Echelard, et al. (2023). How kinematics attributes improve geomorphological interpretation of rock glacier? Preliminary insights from the revision process of the French rock glaciers inventory. 6th European Conference on Permafrost (EUCOP), Jun 2023, Puigcerda, Spain. ⟨hal-04285934⟩"
+
+sensors:
+  planetscope:
+    project: MS_PierreBrune_Planet
+    source:
+      kind: planet_orders
+      root: /media/cusicand/LaCie/PLANET_REPOSITORY/ALPES/FRANCE/PierreBrune.OLD/Backup
+      # Oldest, two middle, last. Where a year has several items, the lowest view angle.
+      orders:
+        Planet_PierreBrune_2016Aug_psorthotile_analytic_sr_udm2: "219088_"
+        Planet_PierreBrune_2018Aug_psorthotile_analytic_sr_udm2: "1665383_"
+        Planet_PierreBrune_2020Aug_psorthotile_analytic_sr_udm2: "3661618_"
+        Planet_PierreBrune_2022Aug_psorthotile_analytic_sr_udm2: "5871370_"
+    aoi_km: 2.5                 # 3 km went over the per-asset size limit
+    resolution_m: 3.0
+    selected_band: 4            # NIR, of blue/green/red/nir
+    pairing: {strategy: forward-backward}
+    correlation: {corr_kernel: [21, 21], subpixel_kernel: [21, 21], corr_search: [-15, -15, 15, 15]}
+    results_only: false         # true once Planet only allows derived products
+    licence: "PlanetScope, Education & Research licence: NOT redistributable until Planet confirms"
+    attribution: >-
+      Imagery © Planet Labs. Planet Team (2026). Planet Application Program Interface: In Space for Life on Earth. San Francisco, CA. https://api.planet.com.
+
+  spot:
+    project: MS_PierreBrune_SPOT
+    source:
+      kind: spot_dimap
+      root: /media/cusicand/LaCie/GMC_raster_data/SPOT
+      years: [2014, 2018, 2021]
+      bank_km: 6.0
+    aoi_km: 3.5
+    # Resampled from the 1.5 m bank: at 1.5 m this project was 401 MB. The bank keeps 1.5 m,
+    # so a test can still sieve it at native resolution.
+    resolution_m: 3.0
+    selected_band: 1
+    pairing: {strategy: forward-backward}
+    correlation: {corr_kernel: [21, 21], subpixel_kernel: [21, 21], corr_search: [-10, -10, 10, 10]}
+    results_only: false
+    licence: "IGN France-Ortho SPOT 6/7: Etalab License 2.0"
+    attribution: "SPOT 6/7 image data © AIRBUS DS (2014, 2018, 2021), IGN France-Ortho product."
+
+  sentinel2:
+    project: MS_PierreBrune_Sentinel2
+    source:
+      kind: mpc
+      collection: S2_SR
+      band: B08
+      # One tile and one relative orbit (UTM 31N: sieve_bulk reprojects to EPSG:2154).
+      match: [T31TGL, R108]
+      # Clean scenes about 2 years apart, chosen from a contact sheet of 31 candidates.
+      dates: ["2018-08-28", "2020-08-27", "2022-09-01", "2025-09-07"]
+      bank_km: 12.0
+    aoi_km: 8.0
+    resolution_m: 10.0
+    selected_band: 1
+    pairing: {strategy: forward-backward}
+    correlation: {corr_kernel: [21, 21], subpixel_kernel: [21, 21], corr_search: [-10, -10, 10, 10]}
+    results_only: false
+    licence: "Copernicus Sentinel data terms (free, full and open)"
+    attribution: "Contains modified Copernicus Sentinel data (2018-2025)."
+
+  landsat:
+    project: MS_PierreBrune_Landsat
+    source:
+      kind: m2m
+      collection: L8_L1
+      band: B8
+      # Landsat 8 only, WRS-2 path/row 195/029, about 3 years apart, 1-6 % cloud.
+      # Not 196/028: its footprint claims the AOI, but its pixels stop short of the east side.
+      match: [LC08, "_195029_"]
+      dates: ["2015-08-30", "2018-09-23", "2021-08-14", "2025-08-09"]
+      bank_km: 13.5
+    aoi_km: 9.0
+    resolution_m: 15.0
+    selected_band: 1
+    pairing: {strategy: forward-backward}
+    correlation: {corr_kernel: [21, 21], subpixel_kernel: [21, 21], corr_search: [-10, -10, 10, 10]}
+    results_only: false
+    licence: "USGS Landsat: public domain"
+    attribution: "Landsat image courtesy of the U.S. Geological Survey."
